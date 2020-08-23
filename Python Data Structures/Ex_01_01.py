@@ -5,4 +5,9 @@ Convert the extracted value to a floating point number and
 print it out.
 '''
 
-text = "X-DSPAM-Confidence:    0.8475";
+text = "X-DSPAM-Confidence:    0.8475"
+
+startpos = text.find('.')
+snum = text[startpos-1 :]
+fnum = float(snum)
+print(fnum)
