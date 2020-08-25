@@ -15,11 +15,19 @@ You can download the sample data at
 http://www.py4e.com/code3/mbox-short.txt when you are testing
 below enter mbox-short.txt as the file name.
 
+Desired O/P --> Average spam confidence: 0.750718518519
+
 '''
 # Use the file name mbox-short.txt as the file name
 fname = input("Enter file name: ")
 fh = open(fname)
+count = 0
+tot = 0
 for line in fh:
     if not line.startswith("X-DSPAM-Confidence:") : continue
-    print(line)
-print("Done")
+    count = count + 1
+    startpos = line.find(" ")
+    num = float(line[startpos + 1 : ])
+    tot = tot + num
+
+print("Average spam confidence:", tot/count)
