@@ -11,11 +11,26 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-url = input('Enter - ')
+url = input('Enter URL: ')
 html = urllib.request.urlopen(url, context=ctx).read()
 soup = BeautifulSoup(html, 'html.parser')
 
+count = int(input('Enter count: '))
+pos = int(input('Enter position: '))
+pos = pos - 1
+
 # Retrieve all of the anchor tags
 tags = soup('a')
-for tag in tags:
-    print(tag.get('href', None))
+new_url = tags[pos].get('href')
+print('Retrieving: ', url)
+print('Retrieving: ', new_url)
+
+# Parse through other links in particular position relative to the first name in the list
+for i in range(count - 1):
+    new_html = urllib.request.urlopen(new_url, context=ctx).read()
+    new_soup = BeautifulSoup(new_html, 'html.parser')
+    new_tags = new_soup('a')
+    new_url = new_tags[pos].get('href')
+    print('Retrieving: ', new_url)
+    
+
