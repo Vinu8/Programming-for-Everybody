@@ -32,5 +32,3 @@ for i in range(count - 1):
     new_tags = new_soup('a')
     new_url = new_tags[pos].get('href')
     print('Retrieving: ', new_url)
-    
-
