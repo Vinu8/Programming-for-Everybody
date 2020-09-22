@@ -13,31 +13,25 @@ if api_key is False:
 else :
     serviceurl = 'https://maps.googleapis.com/maps/api/geocode/xml?'
 
+# Line 5 to 14 only for reference!
+
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-while True:
-    address = input('Enter location: ')
-    if len(address) < 1: break
+sum = 0
 
-    parms = dict()
-    parms['address'] = address
-    if api_key is not False: parms['key'] = api_key
-    url = serviceurl + urllib.parse.urlencode(parms)
-    print('Retrieving', url)
-    uh = urllib.request.urlopen(url, context=ctx)
+address = input('Enter location: ')
+print('Retrieving', address)
+data = urllib.request.urlopen(address, context=ctx).read()
+print('Retrieved', len(data), 'characters')
 
-    data = uh.read()
-    print('Retrieved', len(data), 'characters')
-    print(data.decode())
-    tree = ET.fromstring(data)
+tree = ET.fromstring(data)
+counts = tree.findall('comments/comment/count')
+# OR XPath selector string >>> counts = tree.findall('.//count')
+print('Count:', len(counts))
 
-    results = tree.findall('result')
-    lat = results[0].find('geometry').find('location').find('lat').text
-    lng = results[0].find('geometry').find('location').find('lng').text
-    location = results[0].find('formatted_address').text
-
-    print('lat', lat, 'lng', lng)
-    print(location)
+for item in counts:
+    sum = sum + int(item.text)
+print('Sum:',sum)
